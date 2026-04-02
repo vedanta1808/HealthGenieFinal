@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthGenie – Because Every Second Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== DESIGN SYSTEM ===== */
+:root {
+  --sage: #3d7a5e;
+  --sage-deep: #2a5a43;
+  --sage-dark: #1e3d2e;
+  --sage-mid: #5a9678;
+  --sage-light: #c8e6d8;
+  --sage-pale: #e8f5ee;
+  --sage-ghost: #f2faf6;
+  --cream: #faf9f6;
+  --warm-white: #ffffff;
+  --amber: #f59e0b;
+  --amber-light: #fef3c7;
+  --rose: #e53935;
+  --rose-light: #ffebee;
+  --cobalt: #1565c0;
+  --cobalt-light: #e3f2fd;
+  --ink: #1a2b24;
+  --slate: #4a6357;
+  --mist: #8aa89a;
+  --border: #d4e6db;
+  --shadow-sm: 0 1px 4px rgba(30,60,45,0.06);
+  --shadow: 0 4px 20px rgba(30,60,45,0.10);
+  --shadow-lg: 0 8px 40px rgba(30,60,45,0.14);
+  --shadow-xl: 0 20px 60px rgba(30,60,45,0.18);
+  --r-sm: 12px; --r: 18px; --r-lg: 24px; --r-xl: 32px;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--cream);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+h1,h2,h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.2; }
+
+/* ===== PAGE SYSTEM ===== */
+.page { display: none; min-height: 100vh; animation: pageFade 0.3s ease; }
+.page.active { display: block; }
+@keyframes pageFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ===== TOPNAV ===== */
+.topnav {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.nav-logo-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--sage) 0%, var(--sage-deep) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; box-shadow: 0 2px 8px rgba(61,122,94,0.3);
+}
+.nav-logo-text { font-family: var(--font-display); font-size: 1.4rem; color: var(--sage-deep); }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.nav-lang {
+  padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 50px;
+  font-family: var(--font); font-size: 14px; background: var(--sage-ghost); color: var(--slate);
+  cursor: pointer; font-weight: 500;
+}
+.nav-lang:focus { outline: none; border-color: var(--sage); }
+.nav-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--sage-light), var(--sage-mid));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer; border: 2px solid var(--sage);
+  transition: var(--transition);
+}
+.nav-avatar:hover { transform: scale(1.08); box-shadow: 0 0 0 4px rgba(61,122,94,0.15); }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 26px; border-radius: 50px; border: none;
+  font-family: var(--font); font-size: 16px; font-weight: 600;
+  cursor: pointer; transition: var(--transition); letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--sage) 0%, var(--sage-deep) 100%);
+  color: white; box-shadow: 0 4px 14px rgba(61,122,94,0.35);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(61,122,94,0.45); }
+.btn-primary:active { transform: translateY(0); }
+.btn-outline {
+  background: transparent; color: var(--sage);
+  border: 2px solid var(--sage-light); 
+}
+.btn-outline:hover { background: var(--sage-pale); border-color: var(--sage); }
+.btn-ghost { background: var(--sage-pale); color: var(--sage-deep); border: none; }
+.btn-ghost:hover { background: var(--sage-light); }
+.btn-danger {
+  background: linear-gradient(135deg, #e53935, #b71c1c);
+  color: white; box-shadow: 0 4px 14px rgba(229,57,53,0.35);
+}
+.btn-danger:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(229,57,53,0.45); }
+.btn-amber { background: var(--amber); color: white; box-shadow: 0 4px 14px rgba(245,158,11,0.35); }
+.btn-sm { padding: 8px 18px; font-size: 14px; }
+.btn-lg { padding: 16px 36px; font-size: 18px; }
+.btn-block { width: 100%; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ===== FORM CONTROLS ===== */
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block; font-size: 14px; font-weight: 600;
+  color: var(--slate); margin-bottom: 7px; letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.form-control {
+  width: 100%; padding: 14px 18px;
+  border: 2px solid var(--border); border-radius: var(--r-sm);
+  font-family: var(--font); font-size: 17px; color: var(--ink);
+  background: var(--warm-white); transition: var(--transition);
+}
+.form-control:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 4px rgba(61,122,94,0.10); }
+.form-control::placeholder { color: var(--mist); }
+select.form-control { cursor: pointer; }
+textarea.form-control { resize: vertical; min-height: 90px; }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--warm-white); border-radius: var(--r-lg);
+  padding: 28px; border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.card-sm { padding: 20px; border-radius: var(--r); }
+.card-hover { transition: var(--transition); cursor: pointer; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--sage-light); }
+
+/* ===== GRID ===== */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.grid-5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+
+/* ===== CONTAINER ===== */
+.container { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
+.container-sm { max-width: 560px; margin: 0 auto; padding: 32px 24px; }
+
+/* ===== BADGES ===== */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 50px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
+}
+.badge-green { background: #dcfce7; color: #166534; }
+.badge-yellow { background: var(--amber-light); color: #92400e; }
+.badge-red { background: var(--rose-light); color: #991b1b; }
+.badge-blue { background: var(--cobalt-light); color: #1e3a8a; }
+.badge-sage { background: var(--sage-pale); color: var(--sage-deep); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,20,15,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1000; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; animation: overlayIn 0.2s ease; }
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: var(--warm-white); border-radius: var(--r-xl);
+  padding: 36px; max-width: 500px; width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: modalIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  max-height: 90vh; overflow-y: auto;
+}
+@keyframes modalIn { from { transform: scale(0.88) translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal-title { font-size: 1.5rem; color: var(--sage-deep); margin-bottom: 12px; }
+.modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+
+/* ===== NOTIFICATION BANNER ===== */
+.notif-toast {
+  position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+  min-width: 280px; max-width: 90vw;
+  background: var(--sage-deep); color: white;
+  padding: 14px 24px; border-radius: var(--r);
+  font-weight: 600; font-size: 15px;
+  box-shadow: var(--shadow-lg);
+  z-index: 2000; display: none; text-align: center;
+}
+.notif-toast.show { display: block; animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes toastIn { from { transform: translateX(-50%) translateY(-20px) scale(0.92); opacity: 0; } to { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; } }
+.notif-toast.danger { background: var(--rose); }
+.notif-toast.warning { background: var(--amber); }
+
+/* ===== SECTION HEADER ===== */
+.section-head { margin-bottom: 28px; }
+.section-head h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--sage-deep); margin-bottom: 6px; }
+.section-head p { color: var(--mist); font-size: 16px; }
+
+/* ===== DIVIDER ===== */
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* ===== STATUS PILLS ===== */
+.status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 50px; font-size: 13px; font-weight: 600; }
+.status-pending { background: var(--amber-light); color: #92400e; }
+.status-taken, .status-done { background: #dcfce7; color: #166534; }
+.status-missed { background: var(--rose-light); color: #991b1b; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 4px; background: var(--sage-ghost); padding: 6px; border-radius: var(--r); margin-bottom: 28px; overflow-x: auto; }
+.tab-btn {
+  padding: 10px 22px; border: none; border-radius: var(--r-sm);
+  background: transparent; font-family: var(--font); font-size: 15px;
+  font-weight: 600; color: var(--mist); cursor: pointer;
+  transition: var(--transition); white-space: nowrap;
+}
+.tab-btn.active { background: var(--warm-white); color: var(--sage-deep); box-shadow: var(--shadow-sm); }
+
+/* ===== MEDICINE CARD ===== */
+.med-card {
+  border-radius: var(--r); padding: 22px; margin-bottom: 14px;
+  border: 2px solid var(--border); background: var(--warm-white);
+  transition: var(--transition); position: relative; overflow: hidden;
+}
+.med-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 5px; border-radius: 3px 0 0 3px;
+}
+.med-card.pending::before { background: var(--amber); }
+.med-card.taken::before { background: var(--sage); }
+.med-card.missed::before { background: var(--rose); }
+.med-card.pending { background: #fffdf7; border-color: #fde68a; }
+.med-card.taken { background: #f0fdf4; border-color: var(--sage-light); }
+.med-card.missed { background: #fff5f5; border-color: #fca5a5; }
+.med-name { font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.med-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.med-chip {
+  background: var(--sage-ghost); color: var(--slate);
+  padding: 4px 10px; border-radius: 50px; font-size: 13px; font-weight: 500;
+}
+.med-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.missed-alert {
+  margin-top: 10px; padding: 10px 14px;
+  background: var(--rose-light); border-radius: var(--r-sm);
+  color: #991b1b; font-size: 14px; font-weight: 500;
+  border-left: 3px solid var(--rose);
+}
+
+/* ===== CARE CARD ===== */
+.care-card {
+  border-radius: var(--r); padding: 22px; margin-bottom: 14px;
+  border: 2px solid var(--border); background: var(--warm-white);
+  transition: var(--transition); display: flex;
+  align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.care-card.done { background: #f0fdf4; border-color: var(--sage-light); }
+.care-card.pending { background: #fffdf7; border-color: #fde68a; }
+.care-card.missed { background: #fff5f5; border-color: #fca5a5; }
+.care-icon-wrap {
+  width: 56px; height: 56px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; flex-shrink: 0;
+}
+.care-info { flex: 1; }
+.care-name { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+.care-desc { font-size: 14px; color: var(--mist); margin-top: 3px; }
+.care-time { font-size: 13px; color: var(--slate); margin-top: 5px; font-weight: 500; }
+.care-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ===== MEAL CARD ===== */
+.meal-card {
+  border-radius: var(--r); padding: 22px; margin-bottom: 14px;
+  border: 1px solid var(--border); background: var(--warm-white);
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.meal-time-badge {
+  background: linear-gradient(135deg, var(--sage-pale), var(--sage-light));
+  color: var(--sage-deep); padding: 8px 14px; border-radius: var(--r-sm);
+  font-size: 12px; font-weight: 700; text-align: center;
+  min-width: 90px; flex-shrink: 0; letter-spacing: 0.03em; text-transform: uppercase;
+}
+.meal-icon { font-size: 1.5rem; margin-bottom: 4px; }
+.meal-title { font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.meal-items { font-size: 15px; color: var(--slate); line-height: 1.7; }
+
+/* ===== SOS PAGE ===== */
+.sos-hero { text-align: center; padding: 40px 20px; }
+.sos-ring {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #ff6b6b, var(--rose));
+  box-shadow: 0 0 0 14px rgba(229,57,53,0.12), 0 0 0 28px rgba(229,57,53,0.06),
+              0 12px 40px rgba(229,57,53,0.4);
+  cursor: pointer; transition: var(--transition);
+  border: none; flex-direction: column; gap: 6px;
+  font-family: var(--font); color: white;
+}
+.sos-ring:hover { transform: scale(1.05); box-shadow: 0 0 0 18px rgba(229,57,53,0.15), 0 0 0 36px rgba(229,57,53,0.08), 0 16px 60px rgba(229,57,53,0.5); }
+.sos-ring.active { animation: sosPulse 1s infinite; }
+@keyframes sosPulse { 0%,100% { box-shadow: 0 0 0 14px rgba(229,57,53,0.12), 0 0 0 28px rgba(229,57,53,0.06), 0 12px 40px rgba(229,57,53,0.4); } 50% { box-shadow: 0 0 0 24px rgba(229,57,53,0.18), 0 0 0 48px rgba(229,57,53,0.08), 0 16px 60px rgba(229,57,53,0.5); } }
+.sos-label { font-size: 2.4rem; font-weight: 800; letter-spacing: 0.08em; }
+.sos-sub { font-size: 13px; font-weight: 600; opacity: 0.85; }
+.sos-alert-card {
+  border-radius: var(--r-lg); padding: 32px; background: var(--rose-light);
+  border: 2px solid #fca5a5; margin-bottom: 24px; text-align: center;
+}
+.hospital-card {
+  border-radius: var(--r); padding: 20px; background: var(--warm-white);
+  border: 1px solid var(--border); margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.hospital-info { flex: 1; }
+.hospital-name { font-weight: 700; font-size: 1.05rem; color: var(--ink); margin-bottom: 4px; }
+.hospital-meta { font-size: 14px; color: var(--mist); }
+
+/* ===== FLOATING UI ===== */
+.floating-group {
+  position: fixed; bottom: 30px; right: 26px;
+  display: flex; flex-direction: column; gap: 12px; z-index: 500;
+  align-items: flex-end;
+}
+.fab {
+  width: 58px; height: 58px; border-radius: 50%; border: none;
+  cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-lg); transition: var(--transition); font-family: var(--font);
+}
+.fab-primary { background: linear-gradient(135deg, var(--sage), var(--sage-deep)); color: white; }
+.fab-primary:hover { transform: scale(1.1); box-shadow: var(--shadow-xl); }
+.fab-mic { background: var(--warm-white); color: var(--sage); border: 2px solid var(--sage-light); }
+.fab-mic:hover { background: var(--sage-pale); }
+.fab-mic.listening { background: var(--rose); color: white; border-color: var(--rose); animation: micPulse 1s infinite; }
+@keyframes micPulse { 0%,100% { transform: scale(1); box-shadow: var(--shadow-lg); } 50% { transform: scale(1.12); box-shadow: 0 0 0 8px rgba(229,57,53,0.2), var(--shadow-lg); } }
+.fab-label {
+  background: var(--ink); color: white; padding: 5px 12px;
+  border-radius: 50px; font-size: 12px; font-weight: 600;
+  pointer-events: none; white-space: nowrap;
+}
+
+/* ===== CHAT PANEL ===== */
+.chat-panel {
+  position: fixed; bottom: 110px; right: 26px;
+  width: 360px; max-height: 520px;
+  background: var(--warm-white); border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xl); border: 1px solid var(--border);
+  display: none; flex-direction: column; z-index: 490;
+  animation: chatIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  overflow: hidden;
+}
+.chat-panel.open { display: flex; }
+@keyframes chatIn { from { transform: scale(0.85) translateY(20px) translateX(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.chat-header {
+  padding: 18px 20px; background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+  display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+}
+.chat-header-title { color: white; font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+.chat-header-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+.chat-header-close:hover { background: rgba(255,255,255,0.35); }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--sage-light); border-radius: 2px; }
+.chat-msg { max-width: 84%; padding: 11px 15px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+.chat-msg.bot { background: var(--sage-pale); color: var(--ink); border-bottom-left-radius: 4px; align-self: flex-start; }
+.chat-msg.user { background: linear-gradient(135deg, var(--sage), var(--sage-deep)); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+.chat-msg.typing { background: var(--sage-pale); align-self: flex-start; }
+.typing-dots { display: flex; gap: 4px; align-items: center; height: 20px; }
+.typing-dot { width: 7px; height: 7px; background: var(--sage-mid); border-radius: 50%; animation: dot 1.2s infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dot { 0%,80%,100% { transform: scale(0.6); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+.chat-quick { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+.chat-quick-btn {
+  padding: 5px 12px; border-radius: 50px;
+  border: 1.5px solid var(--sage-light); background: white;
+  color: var(--sage-deep); font-size: 12px; font-weight: 600;
+  cursor: pointer; font-family: var(--font); transition: var(--transition);
+}
+.chat-quick-btn:hover { background: var(--sage-pale); border-color: var(--sage); }
+.voice-status-bar {
+  padding: 8px 16px; background: var(--sage-ghost);
+  font-size: 13px; color: var(--slate); flex-shrink: 0;
+  border-top: 1px solid var(--border); display: none;
+}
+.voice-status-bar.visible { display: block; }
+.chat-input-area { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.chat-input {
+  flex: 1; padding: 10px 16px; border: 2px solid var(--border);
+  border-radius: 50px; font-family: var(--font); font-size: 14px; color: var(--ink);
+  background: var(--sage-ghost); transition: var(--transition);
+}
+.chat-input:focus { outline: none; border-color: var(--sage); background: white; }
+.chat-send {
+  width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--sage), var(--sage-deep));
+  border: none; color: white; font-size: 17px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0;
+}
+.chat-send:hover { transform: scale(1.08); }
+
+/* ===== LANDING PAGE ===== */
+#landingPage { background: var(--cream); }
+.landing-hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 60px 24px 40px;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(61,122,94,0.12) 0%, transparent 70%);
+  text-align: center;
+}
+.hero-logo-wrap {
+  width: 100px; height: 100px; border-radius: 28px; margin: 0 auto 24px;
+  background: linear-gradient(135deg, var(--sage-pale) 0%, var(--sage-light) 100%);
+  border: 3px solid var(--sage-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3.5rem; box-shadow: 0 8px 32px rgba(61,122,94,0.18);
+  animation: heroFloat 4s ease-in-out infinite;
+}
+@keyframes heroFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.hero-headline { font-size: clamp(2.6rem, 7vw, 4.2rem); color: var(--sage-deep); margin-bottom: 14px; line-height: 1.05; }
+.hero-headline em { font-style: italic; color: var(--sage); }
+.hero-tagline { font-size: 1.15rem; color: var(--mist); margin-bottom: 48px; font-weight: 400; }
+.auth-box { width: 100%; max-width: 440px; text-align: left; }
+.demo-strip {
+  background: linear-gradient(135deg, var(--sage-pale), var(--sage-ghost));
+  border: 2px dashed var(--sage-light); border-radius: var(--r);
+  padding: 16px 20px; margin-bottom: 22px; text-align: center;
+}
+.demo-strip-label { font-size: 13px; color: var(--slate); margin-bottom: 6px; font-weight: 500; }
+.demo-creds { font-size: 13px; color: var(--mist); margin-bottom: 10px; }
+.auth-divider { display: flex; align-items: center; gap: 14px; margin: 18px 0; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.auth-divider span { font-size: 13px; color: var(--mist); }
+.auth-footer { display: flex; gap: 10px; margin-top: 14px; }
+.lang-box { width: 100%; max-width: 440px; margin-top: 20px; }
+.lang-box-label { font-size: 14px; font-weight: 600; color: var(--slate); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.landing-footer {
+  border-top: 1px solid var(--border); padding: 28px 24px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 24px;
+  font-size: 14px; color: var(--mist); background: var(--warm-white);
+}
+.landing-footer a { color: var(--mist); text-decoration: none; transition: var(--transition); }
+.landing-footer a:hover { color: var(--sage); }
+.footer-copy { width: 100%; text-align: center; font-size: 12px; margin-top: 4px; }
+
+/* ===== PROFILE PAGE ===== */
+.privacy-card {
+  background: var(--cobalt-light); border: 1.5px solid #93c5fd;
+  border-radius: var(--r-sm); padding: 14px 18px;
+  display: flex; gap: 10px; align-items: flex-start;
+  color: #1e3a8a; font-size: 14px; margin-top: 20px; line-height: 1.5;
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard-bg {
+  background: linear-gradient(160deg, var(--sage-ghost) 0%, var(--cream) 50%);
+  min-height: calc(100vh - 66px);
+}
+.welcome-strip {
+  background: linear-gradient(135deg, var(--sage-deep) 0%, var(--sage-dark) 100%);
+  padding: 32px 28px; border-radius: 0;
+  position: relative; overflow: hidden;
+}
+.welcome-strip::before {
+  content: ''; position: absolute; top: -60px; right: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.welcome-strip::after {
+  content: ''; position: absolute; bottom: -40px; right: 80px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.welcome-name { font-size: clamp(1.6rem, 4vw, 2rem); color: white; margin-bottom: 6px; }
+.welcome-sub { color: rgba(255,255,255,0.65); font-size: 15px; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.summary-stat {
+  background: var(--warm-white); border-radius: var(--r);
+  padding: 20px 16px; text-align: center; border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.summary-num { font-family: var(--font-display); font-size: 2.4rem; color: var(--sage); line-height: 1; }
+.summary-num.danger { color: var(--rose); }
+.summary-label { font-size: 13px; color: var(--mist); margin-top: 6px; font-weight: 500; }
+.feature-card-btn {
+  background: var(--warm-white); border-radius: var(--r-lg);
+  padding: 28px 20px; text-align: center;
+  border: 2px solid var(--border); cursor: pointer;
+  transition: var(--transition); box-shadow: var(--shadow-sm);
+  position: relative; overflow: hidden;
+}
+.feature-card-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--sage-pale) 0%, transparent 60%);
+  opacity: 0; transition: var(--transition);
+}
+.feature-card-btn:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--sage-light); }
+.feature-card-btn:hover::before { opacity: 1; }
+.feature-card-btn.danger { border-color: #fca5a5; }
+.feature-card-btn.danger:hover { border-color: var(--rose); }
+.feature-card-btn.danger::before { background: linear-gradient(135deg, var(--rose-light) 0%, transparent 60%); }
+.feature-icon { font-size: 2.6rem; margin-bottom: 12px; display: block; }
+.feature-label { font-size: 15px; font-weight: 700; color: var(--ink); }
+.feature-label.danger { color: var(--rose); }
+.feature-sublabel { font-size: 13px; color: var(--mist); margin-top: 4px; }
+
+/* ===== DEMO NOTE ===== */
+.demo-note {
+  background: var(--amber-light); border: 1.5px solid #fcd34d;
+  border-radius: var(--r-sm); padding: 12px 16px;
+  color: #78350f; font-size: 13px; margin-bottom: 20px;
+  display: flex; gap: 8px; align-items: flex-start;
+}
+
+/* ===== APPOINTMENT CARD ===== */
+.appt-card {
+  border-radius: var(--r); padding: 20px; border: 1.5px solid var(--cobalt-light);
+  background: #f8faff; margin-bottom: 12px; display: flex;
+  justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap;
+}
+.appt-icon { font-size: 2rem; flex-shrink: 0; }
+.appt-info { flex: 1; }
+.appt-doc { font-weight: 700; font-size: 1.05rem; color: var(--ink); margin-bottom: 4px; }
+.appt-meta { font-size: 14px; color: var(--mist); line-height: 1.7; }
+
+/* ===== DISCLAIMER ===== */
+.disclaimer {
+  background: #fffbeb; border: 1.5px solid #fcd34d;
+  border-radius: var(--r-sm); padding: 14px 18px;
+  color: #78350f; font-size: 14px; line-height: 1.6; margin-bottom: 24px;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--sage-light); border-radius: 3px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .container { padding: 20px 16px; }
+  .modal { padding: 24px 20px; border-radius: var(--r-lg); }
+  .hero-headline { font-size: 2.2rem; }
+  .summary-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .summary-stat { padding: 14px 10px; }
+  .summary-num { font-size: 1.8rem; }
+  .welcome-strip { padding: 24px 20px; }
+  .chat-panel { width: calc(100vw - 32px); right: 16px; }
+  .fab { width: 52px; height: 52px; font-size: 21px; }
+  .sos-ring { width: 200px; height: 200px; }
+  .meal-card { flex-direction: column; }
+}
+@media (max-width: 480px) {
+  .summary-grid { grid-template-columns: repeat(3, 1fr); }
+  .grid-5 { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="notif-toast" id="toast"></div>
+
+<!-- ====================== LANDING ====================== -->
+<div id="landingPage" class="page active">
+  <div class="landing-hero">
+    <div class="hero-logo-wrap">🌿</div>
+    <h1 class="hero-headline">Health<em>Genie</em></h1>
+    <p class="hero-tagline" id="heroTag">Because Every Second Matters</p>
+
+    <div class="auth-box">
+      <!-- Demo strip -->
+      <div class="demo-strip">
+        <div class="demo-strip-label">✨ Try instantly with our demo account</div>
+        <div class="demo-creds">📧 Example@gmail.com &nbsp;•&nbsp; 🔑 12345</div>
+        <button class="btn btn-ghost btn-sm" onclick="fillDemo()" style="width:100%">⚡ Use Demo Login</button>
+      </div>
+
+      <div class="card card-sm">
+        <div class="form-group">
+          <label class="form-label" id="lblEmail">Email</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="your@email.com">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" id="lblPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••">
+        </div>
+        <div id="authErr" style="color:var(--rose);font-size:13px;margin-top:10px;text-align:center;display:none;"></div>
+        <div class="auth-footer">
+          <button class="btn btn-primary" style="flex:1" id="btnLogin" onclick="doLogin()">Login</button>
+          <button class="btn btn-outline" style="flex:1" id="btnSignup" onclick="doSignup()">Sign Up</button>
+        </div>
+      </div>
+
+      <div class="lang-box">
+        <div class="lang-box-label">🌐 <span id="lblLang">Select Language</span></div>
+        <select class="form-control" id="langSelect" onchange="changeLang(this.value)">
+          <option value="en">🇬🇧 English</option>
+          <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
+          <option value="hi">🇮🇳 हिंदी (Hindi)</option>
+          <option value="te">🇮🇳 Telugu (తెలుగు)</option>
+          <option value="ta">🇮🇳 Tamil (தமிழ்)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <footer class="landing-footer">
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="#">Support</a>
+    <a href="#">Terms & Conditions</a>
+    <div class="footer-copy">© 2025 HealthGenie. All health data stored locally on your device. 🔒</div>
+  </footer>
+</div>
+
+<!-- ====================== PROFILE ====================== -->
+<div id="profilePage" class="page">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="navigate('dashboardPage')">
+      <div class="nav-logo-icon">🌿</div>
+      <span class="nav-logo-text">HealthGenie</span>
+    </div>
+    <div class="nav-actions">
+      <select class="nav-lang" id="navLangP" onchange="changeLang(this.value)">
+        <option value="en">English</option><option value="kn">ಕನ್ನಡ</option>
+        <option value="hi">हिंदी</option><option value="te">Telugu</option><option value="ta">Tamil</option>
+      </select>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div class="container-sm">
+    <div class="section-head" style="text-align:center;margin-top:8px;">
+      <h2 id="profileTitle">Set Up Your Profile</h2>
+      <p id="profileSub">Help us personalise your care experience</p>
+    </div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label" id="pLblName">Full Name</label><input class="form-control" id="pName" placeholder="e.g. Ramesh Kumar"></div>
+        <div class="form-group"><label class="form-label" id="pLblAge">Age</label><input class="form-control" type="number" id="pAge" placeholder="e.g. 68" min="1" max="120"></div>
+        <div class="form-group"><label class="form-label" id="pLblLocation">Location</label><input class="form-control" id="pLocation" placeholder="City, State"></div>
+        <div class="form-group"><label class="form-label" id="pLblMobile">Mobile Number</label><input class="form-control" id="pMobile" placeholder="+91 98765 43210" type="tel"></div>
+        <div class="form-group"><label class="form-label" id="pLblECName">Emergency Contact Name</label><input class="form-control" id="pECName" placeholder="e.g. Priya (Daughter)"></div>
+        <div class="form-group"><label class="form-label" id="pLblECNum">Emergency Phone</label><input class="form-control" id="pECNum" placeholder="+91 98765 00000" type="tel"></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label" id="pLblMedHistory">Medical History</label><textarea class="form-control" id="pMedHistory" rows="2" placeholder="e.g. Type 2 Diabetes, Hypertension, Knee Arthritis"></textarea></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label" id="pLblMedication">Current Medications</label><textarea class="form-control" id="pMedication" rows="2" placeholder="e.g. Metformin 500mg, Amlodipine 5mg, Aspirin 75mg"></textarea></div>
+        <div class="form-group"><label class="form-label" id="pLblDoctor">Family Doctor (optional)</label><input class="form-control" id="pDoctor" placeholder="Dr. Suresh Sharma"></div>
+        <div class="form-group"><label class="form-label" id="pLblReport">Upload Medical Report</label><input type="file" class="form-control" id="pReport" accept="image/*,.pdf" style="padding:10px;font-size:14px;"></div>
+      </div>
+      <div class="privacy-card">
+        <span style="font-size:1.3rem;flex-shrink:0;">🔒</span>
+        <span id="privacyNote">Your health information is handled privately and used only to support your reminders and care features. All data is stored locally on your device.</span>
+      </div>
+      <div style="margin-top:24px;text-align:center;">
+        <button class="btn btn-primary btn-lg" onclick="saveProfile()" id="btnSaveProfile">Save & Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== DASHBOARD ====================== -->
+<div id="dashboardPage" class="page">
+  <nav class="topnav">
+    <div class="nav-logo"><div class="nav-logo-icon">🌿</div><span class="nav-logo-text">HealthGenie</span></div>
+    <div class="nav-actions">
+      <select class="nav-lang" id="navLangD" onchange="changeLang(this.value)">
+        <option value="en">English</option><option value="kn">ಕನ್ನಡ</option>
+        <option value="hi">हिंदी</option><option value="te">Telugu</option><option value="ta">Tamil</option>
+      </select>
+      <div class="nav-avatar" onclick="openProfile()" title="Edit Profile">👤</div>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div class="dashboard-bg">
+    <div class="welcome-strip">
+      <div class="container" style="padding-top:0;padding-bottom:0;">
+        <h2 class="welcome-name" id="dashWelcome">Good morning! 👋</h2>
+        <p class="welcome-sub" id="dashSub">Here's your health snapshot for today</p>
+      </div>
+    </div>
+    <div class="container">
+      <!-- Summary -->
+      <div class="card" style="margin-bottom:28px;padding:24px;">
+        <div class="card-title" id="dashSummaryTitle" style="font-weight:700;color:var(--slate);font-size:14px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:18px;">📊 Today's Summary</div>
+        <div class="summary-grid">
+          <div class="summary-stat"><div class="summary-num" id="sumMedTaken">0</div><div class="summary-label" id="sumMedLbl">Medicines Taken</div></div>
+          <div class="summary-stat"><div class="summary-num" id="sumCareDone">0</div><div class="summary-label" id="sumCareLbl">Care Done</div></div>
+          <div class="summary-stat"><div class="summary-num danger" id="sumMissed">0</div><div class="summary-label" id="sumMissedLbl">Missed</div></div>
+        </div>
+      </div>
+      <!-- Feature cards -->
+      <div class="grid-5">
+        <div class="feature-card-btn" onclick="navigate('reminderPage')">
+          <span class="feature-icon">💊</span>
+          <div class="feature-label" id="f1">Reminder Friend</div>
+          <div class="feature-sublabel">Medicines & Appointments</div>
+        </div>
+        <div class="feature-card-btn" onclick="navigate('dailyCarePage')">
+          <span class="feature-icon">🌿</span>
+          <div class="feature-label" id="f2">Daily Care</div>
+          <div class="feature-sublabel">Walk, Water, Yoga</div>
+        </div>
+        <div class="feature-card-btn" onclick="navigate('dietPage')">
+          <span class="feature-icon">🥗</span>
+          <div class="feature-label" id="f3">Diet Plan</div>
+          <div class="feature-sublabel">Personalised meals</div>
+        </div>
+        <div class="feature-card-btn danger" onclick="navigate('sosPage')">
+          <span class="feature-icon">🆘</span>
+          <div class="feature-label danger" id="f4">Emergency SOS</div>
+          <div class="feature-sublabel" style="color:var(--rose);">One-tap help</div>
+        </div>
+        <div class="feature-card-btn" onclick="openChat()">
+          <span class="feature-icon">🤖</span>
+          <div class="feature-label" id="f5">Health Assistant</div>
+          <div class="feature-sublabel">Ask Genie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== REMINDER PAGE ====================== -->
+<div id="reminderPage" class="page">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="navigate('dashboardPage')" style="cursor:pointer;">
+      <div class="nav-logo-icon">🌿</div><span class="nav-logo-text">HealthGenie</span>
+    </div>
+    <div class="nav-actions"><button class="btn btn-outline btn-sm" onclick="navigate('dashboardPage')">← Back</button></div>
+  </nav>
+  <div class="container">
+    <div class="section-head"><h2 id="reminderTitle">Reminder Friend</h2><p id="reminderSub">Manage your medicines and appointments</p></div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabMeds" onclick="switchTab('tabMeds','medTab')">💊 Medicines</button>
+      <button class="tab-btn" id="tabAppts" onclick="switchTab('tabAppts','apptTab')">📅 Appointments</button>
+    </div>
+
+    <!-- Medicine Tab -->
+    <div id="medTab">
+      <div class="card" style="margin-bottom:20px;">
+        <div style="font-weight:700;color:var(--sage-deep);font-size:1.05rem;margin-bottom:18px;" id="addMedTitle">+ Add Medicine Reminder</div>
+        <div class="grid-2">
+          <div class="form-group"><label class="form-label">Tablet Name</label><input class="form-control" id="medName" placeholder="e.g. BP Tablet, Metformin"></div>
+          <div class="form-group"><label class="form-label">Reminder Time</label><input class="form-control" type="time" id="medTime"></div>
+          <div class="form-group"><label class="form-label">When to Take</label>
+            <select class="form-control" id="medWhen"><option>Before Food</option><option>After Food</option><option>With Food</option></select>
+          </div>
+          <div class="form-group"><label class="form-label">Dose</label>
+            <select class="form-control" id="medDose"><option>1 tablet</option><option>½ tablet</option><option>2 tablets</option></select>
+          </div>
+          <div class="form-group"><label class="form-label">Frequency</label>
+            <select class="form-control" id="medFreq"><option>Daily</option><option>Twice a day</option><option>Weekly once</option><option>Custom</option></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addMedicine()">✅ Add Reminder</button>
+      </div>
+      <div class="demo-note">
+        📱 <div><strong>Demo Mode:</strong> Voice reminders play via browser Speech Synthesis. Call buttons open your phone dialer (tel: links). Real automatic calling requires a backend service like Twilio or Exotel.</div>
+      </div>
+      <div id="medList"><div style="text-align:center;padding:32px;color:var(--mist);">No medicine reminders yet. Add one above ☝️</div></div>
+    </div>
+
+    <!-- Appointment Tab -->
+    <div id="apptTab" style="display:none;">
+      <div class="card" style="margin-bottom:20px;">
+        <div style="font-weight:700;color:var(--sage-deep);font-size:1.05rem;margin-bottom:18px;">+ Add Appointment</div>
+        <div class="grid-2">
+          <div class="form-group"><label class="form-label">Doctor Name</label><input class="form-control" id="apptDoc" placeholder="Dr. Ramesh Gupta"></div>
+          <div class="form-group"><label class="form-label">Hospital / Clinic</label><input class="form-control" id="apptHosp" placeholder="City Hospital, Bengaluru"></div>
+          <div class="form-group"><label class="form-label">Date</label><input class="form-control" type="date" id="apptDate"></div>
+          <div class="form-group"><label class="form-label">Time</label><input class="form-control" type="time" id="apptTime"></div>
+          <div class="form-group" style="grid-column:1/-1"><label class="form-label">Notes</label><input class="form-control" id="apptNotes" placeholder="e.g. Carry blood test reports, x-ray films"></div>
+        </div>
+        <button class="btn btn-primary" onclick="addAppointment()">✅ Save Appointment</button>
+      </div>
+      <div id="apptList"><div style="text-align:center;padding:32px;color:var(--mist);">No appointments yet. Add your first one above ☝️</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== DAILY CARE PAGE ====================== -->
+<div id="dailyCarePage" class="page">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="navigate('dashboardPage')" style="cursor:pointer;">
+      <div class="nav-logo-icon">🌿</div><span class="nav-logo-text">HealthGenie</span>
+    </div>
+    <div class="nav-actions"><button class="btn btn-outline btn-sm" onclick="navigate('dashboardPage')">← Back</button></div>
+  </nav>
+  <div class="container">
+    <div class="section-head"><h2 id="careTitle">Daily Care</h2><p id="careSub">Track your wellness activities today</p></div>
+    <div class="demo-note">📱 <div><strong>Demo Mode:</strong> Voice reminders via Speech Synthesis + one-tap call buttons. Real background scheduling requires a server-side solution.</div></div>
+    <div id="careList"></div>
+  </div>
+</div>
+
+<!-- ====================== DIET PLAN PAGE ====================== -->
+<div id="dietPage" class="page">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="navigate('dashboardPage')" style="cursor:pointer;">
+      <div class="nav-logo-icon">🌿</div><span class="nav-logo-text">HealthGenie</span>
+    </div>
+    <div class="nav-actions"><button class="btn btn-outline btn-sm" onclick="navigate('dashboardPage')">← Back</button></div>
+  </nav>
+  <div class="container" style="max-width:700px;">
+    <div class="section-head"><h2 id="dietTitle">Your Diet Plan</h2><p id="dietSub">Personalised for your age & health profile</p></div>
+    <div class="disclaimer" id="dietDisclaimer">⚕️ This is supportive wellness guidance only — not a substitute for professional medical advice. Always consult your doctor for specific dietary needs.</div>
+    <div id="dietContent"></div>
+  </div>
+</div>
+
+<!-- ====================== SOS PAGE ====================== -->
+<div id="sosPage" class="page">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="navigate('dashboardPage')" style="cursor:pointer;">
+      <div class="nav-logo-icon">🌿</div><span class="nav-logo-text">HealthGenie</span>
+    </div>
+    <div class="nav-actions"><button class="btn btn-outline btn-sm" onclick="navigate('dashboardPage')">← Back</button></div>
+  </nav>
+  <div class="container" style="max-width:700px;">
+    <div class="section-head" style="text-align:center;"><h2 id="sosTitle">Emergency SOS</h2><p id="sosHint">Press the button below in case of emergency</p></div>
+    <div class="sos-hero">
+      <button class="sos-ring" id="sosMainBtn" onclick="triggerSOS()">
+        <span class="sos-label">SOS</span>
+        <span class="sos-sub">PRESS FOR HELP</span>
+        <span style="font-size:2rem;margin-top:4px;">🆘</span>
+      </button>
+    </div>
+    <div id="sosAlert" style="display:none;" class="sos-alert-card">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🚨</div>
+      <div style="font-size:1.3rem;font-weight:700;color:var(--rose);margin-bottom:8px;" id="sosMsg1">Emergency assistance activated!</div>
+      <p style="color:var(--slate);font-size:1rem;margin-bottom:16px;">Stay calm. Help is on the way. Your emergency contacts have been alerted.</p>
+      <div id="sosCallBtns" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;"></div>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-weight:700;color:var(--slate);font-size:14px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;">📞 Quick Emergency Calls</div>
+      <div id="quickCallBtns" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;color:var(--slate);font-size:14px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px;">🏥 Nearby Hospitals</div>
+      <div id="hospitalList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== MODALS ====================== -->
+<div class="modal-overlay" id="sosModal">
+  <div class="modal">
+    <div class="modal-title" style="color:var(--rose);">🆘 Confirm Emergency?</div>
+    <p style="color:var(--slate);font-size:15px;line-height:1.6;margin-bottom:4px;">This will alert your emergency contacts and activate all available help options.</p>
+    <p style="color:var(--mist);font-size:13px;">Are you sure you need emergency assistance?</p>
+    <div class="modal-actions">
+      <button class="btn btn-danger" style="flex:1" onclick="confirmSOS()">Yes, Send SOS</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('sosModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal">
+    <div class="modal-title">✏️ Edit Profile</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Name</label><input class="form-control" id="epName"></div>
+      <div class="form-group"><label class="form-label">Age</label><input class="form-control" type="number" id="epAge"></div>
+      <div class="form-group"><label class="form-label">Mobile</label><input class="form-control" id="epMobile" type="tel"></div>
+      <div class="form-group"><label class="form-label">Emergency Phone</label><input class="form-control" id="epECNum" type="tel"></div>
+      <div class="form-group" style="grid-column:1/-1"><label class="form-label">Medical History</label><textarea class="form-control" id="epMedHistory" rows="2"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" style="flex:1" onclick="saveEditProfile()">Save Changes</button>
+      <button class="btn btn-outline" style="flex:1" onclick="closeModal('editProfileModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== FLOATING UI ====================== -->
+<div class="floating-group" id="floatingGroup" style="display:none;">
+  <button class="fab fab-mic" id="micBtn" onclick="toggleVoice()" title="Hey Genie (Voice)">🎤</button>
+  <button class="fab fab-primary" onclick="openChat()" title="Health Assistant">🤖</button>
+</div>
+
+<!-- ====================== CHAT PANEL ====================== -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-header-title">
+      <span style="font-size:1.3rem;">🌿</span> Genie Assistant
+    </div>
+    <button class="chat-header-close" onclick="closeChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-quick">
+    <button class="chat-quick-btn" onclick="quickAsk('medicine')">💊 Medicines</button>
+    <button class="chat-quick-btn" onclick="quickAsk('appointment')">📅 Appts</button>
+    <button class="chat-quick-btn" onclick="quickAsk('eat')">🥗 Diet</button>
+    <button class="chat-quick-btn" onclick="quickAsk('emergency contact')">🆘 SOS</button>
+    <button class="chat-quick-btn" onclick="quickAsk('care status')">🌿 Care</button>
+  </div>
+  <div class="voice-status-bar" id="voiceStatusBar"></div>
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask Genie anything..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   TRANSLATIONS
+   ============================================================ */
+const T = {
+  en: {
+    heroTag:'Because Every Second Matters',
+    lblEmail:'Email', lblPassword:'Password', lblLang:'Select Language',
+    btnLogin:'Login', btnSignup:'Sign Up',
+    profileTitle:'Set Up Your Profile', profileSub:'Help us personalise your care experience',
+    pLblName:'Full Name',pLblAge:'Age',pLblLocation:'Location',pLblMobile:'Mobile Number',
+    pLblECName:'Emergency Contact Name',pLblECNum:'Emergency Phone',
+    pLblMedHistory:'Medical History',pLblMedication:'Current Medications',
+    pLblDoctor:'Family Doctor (optional)',pLblReport:'Upload Medical Report',
+    privacyNote:'Your health information is handled privately and used only to support your reminders and care features. All data is stored locally on your device.',
+    btnSaveProfile:'Save & Continue →',
+    dashWelcome:'Good morning!', dashSub:"Here's your health snapshot for today",
+    dashSummaryTitle:"Today's Summary",
+    sumMedLbl:'Medicines Taken',sumCareLbl:'Care Done',sumMissedLbl:'Missed',
+    f1:'Reminder Friend',f2:'Daily Care',f3:'Diet Plan',f4:'Emergency SOS',f5:'Health Assistant',
+    reminderTitle:'Reminder Friend',reminderSub:'Manage your medicines and appointments',
+    addMedTitle:'+ Add Medicine Reminder',
+    careTitle:'Daily Care',careSub:'Track your wellness activities today',
+    dietTitle:'Your Diet Plan',dietSub:'Personalised for your age & health profile',
+    dietDisclaimer:'⚕️ This is supportive wellness guidance only — not a substitute for professional medical advice.',
+    sosTitle:'Emergency SOS',sosHint:'Press the button below in case of emergency',
+    sosMsg1:'Emergency assistance activated!'
+  },
+  kn: {
+    heroTag:'ಪ್ರತಿ ಕ್ಷಣವೂ ಮುಖ್ಯ',
+    lblEmail:'ಇಮೇಲ್', lblPassword:'ಪಾಸ್‌ವರ್ಡ್', lblLang:'ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ',
+    btnLogin:'ಲಾಗಿನ್', btnSignup:'ನೋಂದಾಯಿಸಿ',
+    profileTitle:'ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಸೆಟಪ್ ಮಾಡಿ', profileSub:'ನಿಮ್ಮ ಆರೈಕೆಯನ್ನು ವೈಯಕ್ತಿಕಗೊಳಿಸಲು ಸಹಾಯ ಮಾಡಿ',
+    pLblName:'ಪೂರ್ಣ ಹೆಸರು',pLblAge:'ವಯಸ್ಸು',pLblLocation:'ಸ್ಥಳ',pLblMobile:'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ',
+    pLblECName:'ತುರ್ತು ಸಂಪರ್ಕ ಹೆಸರು',pLblECNum:'ತುರ್ತು ಫೋನ್',
+    pLblMedHistory:'ವೈದ್ಯಕೀಯ ಇತಿಹಾಸ',pLblMedication:'ಪ್ರಸ್ತುತ ಔಷಧಿಗಳು',
+    pLblDoctor:'ಕುಟುಂಬ ವೈದ್ಯರು',pLblReport:'ವೈದ್ಯಕೀಯ ವರದಿ ಅಪ್‌ಲೋಡ್',
+    privacyNote:'ನಿಮ್ಮ ಆರೋಗ್ಯ ಮಾಹಿತಿಯನ್ನು ಖಾಸಗಿಯಾಗಿ ನಿರ್ವಹಿಸಲಾಗುತ್ತದೆ.',
+    btnSaveProfile:'ಉಳಿಸಿ ಮತ್ತು ಮುಂದುವರಿಸಿ →',
+    dashWelcome:'ಶುಭೋದಯ!', dashSub:'ಇಂದು ನಿಮ್ಮ ಆರೋಗ್ಯ ಸಾರಾಂಶ',
+    dashSummaryTitle:'ಇಂದಿನ ಸಾರಾಂಶ',
+    sumMedLbl:'ತೆಗೆದ ಔಷಧಿ',sumCareLbl:'ಆರೈಕೆ ಮಾಡಿದ',sumMissedLbl:'ತಪ್ಪಿಸಿದ',
+    f1:'ರಿಮೈಂಡರ್ ಸ್ನೇಹಿತ',f2:'ದೈನಂದಿನ ಆರೈಕೆ',f3:'ಆಹಾರ ಯೋಜನೆ',f4:'ತುರ್ತು SOS',f5:'ಆರೋಗ್ಯ ಸಹಾಯಕ',
+    reminderTitle:'ರಿಮೈಂಡರ್ ಸ್ನೇಹಿತ',reminderSub:'ನಿಮ್ಮ ಔಷಧಿ ಮತ್ತು ನೇಮಕಾತಿ ನಿರ್ವಹಿಸಿ',
+    addMedTitle:'+ ಔಷಧಿ ರಿಮೈಂಡರ್ ಸೇರಿಸಿ',
+    careTitle:'ದೈನಂದಿನ ಆರೈಕೆ',careSub:'ಇಂದಿನ ಚಟುವಟಿಕೆಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ',
+    dietTitle:'ನಿಮ್ಮ ಆಹಾರ ಯೋಜನೆ',dietSub:'ನಿಮ್ಮ ವಯಸ್ಸು ಮತ್ತು ಆರೋಗ್ಯ ಆಧಾರಿತ',
+    dietDisclaimer:'⚕️ ಇದು ಕೇವಲ ಸಾಮಾನ್ಯ ಮಾರ್ಗದರ್ಶನ — ವೈದ್ಯಕೀಯ ಸಲಹೆಯ ಬದಲಿಯಲ್ಲ.',
+    sosTitle:'ತುರ್ತು SOS',sosHint:'ತುರ್ತು ಸಂದರ್ಭದಲ್ಲಿ ಕೆಳಗಿನ ಬಟನ್ ಒತ್ತಿರಿ',
+    sosMsg1:'ತುರ್ತು ಸಹಾಯ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ!'
+  },
+  hi: {
+    heroTag:'क्योंकि हर पल मायने रखता है',
+    lblEmail:'ईमेल', lblPassword:'पासवर्ड', lblLang:'भाषा चुनें',
+    btnLogin:'लॉगिन', btnSignup:'साइन अप',
+    profileTitle:'अपनी प्रोफ़ाइल सेट करें', profileSub:'अपनी देखभाल को व्यक्तिगत बनाने में मदद करें',
+    pLblName:'पूरा नाम',pLblAge:'आयु',pLblLocation:'स्थान',pLblMobile:'मोबाइल नंबर',
+    pLblECName:'आपातकालीन संपर्क नाम',pLblECNum:'आपातकालीन फोन',
+    pLblMedHistory:'चिकित्सा इतिहास',pLblMedication:'वर्तमान दवाएं',
+    pLblDoctor:'पारिवारिक डॉक्टर',pLblReport:'मेडिकल रिपोर्ट अपलोड करें',
+    privacyNote:'आपकी स्वास्थ्य जानकारी निजी रूप से संभाली जाती है और केवल आपकी देखभाल के लिए उपयोग की जाती है।',
+    btnSaveProfile:'सहेजें और जारी रखें →',
+    dashWelcome:'सुप्रभात!', dashSub:'आज का आपका स्वास्थ्य अवलोकन',
+    dashSummaryTitle:'आज का सारांश',
+    sumMedLbl:'दवाएं ली',sumCareLbl:'देखभाल पूरी',sumMissedLbl:'छूटी हुई',
+    f1:'रिमाइंडर फ्रेंड',f2:'दैनिक देखभाल',f3:'आहार योजना',f4:'आपातकालीन SOS',f5:'स्वास्थ्य सहायक',
+    reminderTitle:'रिमाइंडर फ्रेंड',reminderSub:'अपनी दवाओं और अपॉइंटमेंट को मैनेज करें',
+    addMedTitle:'+ दवा रिमाइंडर जोड़ें',
+    careTitle:'दैनिक देखभाल',careSub:'आज की स्वास्थ्य गतिविधियां ट्रैक करें',
+    dietTitle:'आपकी आहार योजना',dietSub:'आपकी आयु और स्वास्थ्य के अनुसार',
+    dietDisclaimer:'⚕️ यह केवल सामान्य मार्गदर्शन है — चिकित्सा सलाह का विकल्प नहीं।',
+    sosTitle:'आपातकालीन SOS',sosHint:'आपातकाल में नीचे बटन दबाएं',
+    sosMsg1:'आपातकालीन सहायता सक्रिय!'
+  },
+  te: {
+    heroTag:'ప్రతి క్షణం ముఖ్యమైనది',
+    lblEmail:'ఇమెయిల్', lblPassword:'పాస్‌వర్డ్', lblLang:'భాష ఎంచుకోండి',
+    btnLogin:'లాగిన్', btnSignup:'సైన్ అప్',
+    profileTitle:'మీ ప్రొఫైల్ సెటప్ చేయండి', profileSub:'మీ సంరక్షణను వ్యక్తిగతీకరించండి',
+    pLblName:'పూర్తి పేరు',pLblAge:'వయసు',pLblLocation:'స్థలం',pLblMobile:'మొబైల్ నంబర్',
+    pLblECName:'అత్యవసర పరిచయం',pLblECNum:'అత్యవసర ఫోన్',
+    pLblMedHistory:'వైద్య చరిత్ర',pLblMedication:'ప్రస్తుత మందులు',
+    pLblDoctor:'కుటుంబ వైద్యుడు',pLblReport:'వైద్య నివేదిక అప్‌లోడ్',
+    privacyNote:'మీ ఆరోగ్య సమాచారం గోప్యంగా నిర్వహించబడుతుంది.',
+    btnSaveProfile:'సేవ్ చేయి & కొనసాగించు →',
+    dashWelcome:'శుభోదయం!', dashSub:'ఈరోజు మీ ఆరోగ్య స్నాప్‌షాట్',
+    dashSummaryTitle:'ఈరోజు సారాంశం',
+    sumMedLbl:'తీసుకున్న మందులు',sumCareLbl:'సంరక్షణ పూర్తి',sumMissedLbl:'మిస్ అయింది',
+    f1:'రిమైండర్ ఫ్రెండ్',f2:'దైనందిన సంరక్షణ',f3:'ఆహార ప్రణాళిక',f4:'అత్యవసర SOS',f5:'ఆరోగ్య సహాయకుడు',
+    reminderTitle:'రిమైండర్ ఫ్రెండ్',reminderSub:'మీ మందులు మరియు అపాయింట్‌మెంట్‌లు నిర్వహించండి',
+    addMedTitle:'+ మందు రిమైండర్ జోడించు',
+    careTitle:'దైనందిన సంరక్షణ',careSub:'ఈరోజు ఆరోగ్య కార్యకలాపాలను ట్రాక్ చేయండి',
+    dietTitle:'మీ ఆహార ప్రణాళిక',dietSub:'మీ వయసు మరియు ఆరోగ్యం ఆధారంగా',
+    dietDisclaimer:'⚕️ ఇది సాధారణ మార్గదర్శకత్వం మాత్రమే.',
+    sosTitle:'అత్యవసర SOS',sosHint:'అత్యవసర పరిస్థితిలో బటన్ నొక్కండి',
+    sosMsg1:'అత్యవసర సహాయం సక్రియమైంది!'
+  },
+  ta: {
+    heroTag:'ஒவ்வொரு நொடியும் முக்கியம்',
+    lblEmail:'மின்னஞ்சல்', lblPassword:'கடவுச்சொல்', lblLang:'மொழி தேர்ந்தெடுக்கவும்',
+    btnLogin:'உள்நுழைய', btnSignup:'பதிவு செய்ய',
+    profileTitle:'உங்கள் சுயவிவரத்தை அமைக்கவும்', profileSub:'உங்கள் கவலையை தனிப்பயனாக்குங்கள்',
+    pLblName:'முழு பெயர்',pLblAge:'வயது',pLblLocation:'இடம்',pLblMobile:'மொபைல் எண்',
+    pLblECName:'அவசர தொடர்பு பெயர்',pLblECNum:'அவசர தொலைபேசி',
+    pLblMedHistory:'மருத்துவ வரலாறு',pLblMedication:'தற்போதைய மருந்துகள்',
+    pLblDoctor:'குடும்ப மருத்துவர்',pLblReport:'மருத்துவ அறிக்கை பதிவேற்றம்',
+    privacyNote:'உங்கள் சுகாதார தகவல்கள் தனிப்பட்ட முறையில் பாதுகாக்கப்படுகின்றன.',
+    btnSaveProfile:'சேமி & தொடர் →',
+    dashWelcome:'காலை வணக்கம்!', dashSub:'இன்றைய உடல்நல மேலோட்டம்',
+    dashSummaryTitle:'இன்றைய சுருக்கம்',
+    sumMedLbl:'எடுத்த மருந்துகள்',sumCareLbl:'பராமரிப்பு முடிந்தது',sumMissedLbl:'தவறியது',
+    f1:'ரிமைண்டர் நண்பன்',f2:'தினசரி பராமரிப்பு',f3:'உணவு திட்டம்',f4:'அவசர SOS',f5:'உடல்நல உதவியாளர்',
+    reminderTitle:'ரிமைண்டர் நண்பன்',reminderSub:'உங்கள் மருந்துகளை நிர்வகிக்கவும்',
+    addMedTitle:'+ மருந்து ரிமைண்டர் சேர்க்கவும்',
+    careTitle:'தினசரி பராமரிப்பு',careSub:'இன்றைய ஆரோக்கிய நடவடிக்கைகளை கண்காணிக்கவும்',
+    dietTitle:'உங்கள் உணவு திட்டம்',dietSub:'உங்கள் வயது மற்றும் ஆரோக்கியம் அடிப்படையில்',
+    dietDisclaimer:'⚕️ இது பொதுவான வழிகாட்டுதல் மட்டுமே — மருத்துவ ஆலோசனைக்கு மாற்றில்லை.',
+    sosTitle:'அவசர SOS',sosHint:'அவசரகால நிலையில் கீழே உள்ள பொத்தானை அழுத்தவும்',
+    sosMsg1:'அவசர உதவி செயல்படுத்தப்பட்டது!'
+  }
+};
+
+const LANG_CODES = { en:'en-US', kn:'kn-IN', hi:'hi-IN', te:'te-IN', ta:'ta-IN' };
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let S = {
+  lang: ls('hg_lang') || 'en',
+  loggedIn: ls('hg_loggedIn') === 'true',
+  profileDone: ls('hg_profileDone') === 'true',
+  profile: lsJ('hg_profile', {}),
+  medicines: lsJ('hg_meds', []),
+  appointments: lsJ('hg_appts', []),
+  careItems: null,
+  lastReminder: '',
+  currentPage: 'landingPage'
+};
+
+function ls(k) { return localStorage.getItem(k); }
+function lsS(k,v) { localStorage.setItem(k, v); }
+function lsJ(k,def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch { return def; } }
+function persist() {
+  lsS('hg_meds', JSON.stringify(S.medicines));
+  lsS('hg_appts', JSON.stringify(S.appointments));
+  lsS('hg_careItems', JSON.stringify(S.careItems));
+  lsS('hg_profile', JSON.stringify(S.profile));
+}
+function t(k) { return (T[S.lang]||T.en)[k] || (T.en[k]||k); }
+
+/* ============================================================
+   INIT
+   ============================================================ */
+window.onload = () => {
+  initCareItems();
+  syncLangDropdowns();
+  applyTranslations(S.lang);
+  if (S.loggedIn) {
+    if (!S.profileDone) navigate('profilePage');
+    else { buildDashboard(); navigate('dashboardPage'); }
+  } else {
+    navigate('landingPage');
+  }
+  startReminderLoop();
+};
+
+function syncLangDropdowns() {
+  ['langSelect','navLangP','navLangD'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = S.lang;
+  });
+}
+
+function applyTranslations(lang) {
+  S.lang = lang; lsS('hg_lang', lang);
+  const tr = T[lang] || T.en;
+  Object.keys(tr).forEach(k => {
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (el.tagName === 'BUTTON' || (el.tagName === 'INPUT' && el.type === 'button')) el.textContent = tr[k];
+    else el.textContent = tr[k];
+  });
+  syncLangDropdowns();
+}
+
+function changeLang(lang) { applyTranslations(lang); }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function navigate(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  S.currentPage = pageId;
+  const showFloat = ['dashboardPage','reminderPage','dailyCarePage','dietPage','sosPage'].includes(pageId);
+  document.getElementById('floatingGroup').style.display = showFloat ? 'flex' : 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (pageId === 'dailyCarePage') renderCare();
+  if (pageId === 'dietPage') renderDiet();
+  if (pageId === 'sosPage') renderSOS();
+  if (pageId === 'reminderPage') renderMedList();
+  if (pageId === 'dashboardPage') updateSummary();
+}
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+function fillDemo() {
+  document.getElementById('loginEmail').value = 'Example@gmail.com';
+  document.getElementById('loginPassword').value = '12345';
+}
+
+function doLogin() {
+  const e = document.getElementById('loginEmail').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  if (!e || !p) { showAuthErr('Please enter email and password.'); return; }
+  lsS('hg_loggedIn','true'); lsS('hg_email',e);
+  S.loggedIn = true;
+  if (!S.profileDone) navigate('profilePage'); else { buildDashboard(); navigate('dashboardPage'); }
+}
+
+function doSignup() {
+  const e = document.getElementById('loginEmail').value.trim();
+  const p = document.getElementById('loginPassword').value.trim();
+  if (!e || !p) { showAuthErr('Please enter email and password.'); return; }
+  lsS('hg_loggedIn','true'); lsS('hg_email',e);
+  S.loggedIn = true; navigate('profilePage');
+}
+
+function logout() {
+  lsS('hg_loggedIn','false'); S.loggedIn = false; navigate('landingPage');
+}
+
+function showAuthErr(msg) {
+  const el = document.getElementById('authErr');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+function saveProfile() {
+  const p = {
+    name: document.getElementById('pName').value.trim(),
+    age: document.getElementById('pAge').value.trim(),
+    location: document.getElementById('pLocation').value.trim(),
+    mobile: document.getElementById('pMobile').value.trim(),
+    ecName: document.getElementById('pECName').value.trim(),
+    ecNum: document.getElementById('pECNum').value.trim(),
+    medHistory: document.getElementById('pMedHistory').value.trim(),
+    medication: document.getElementById('pMedication').value.trim(),
+    doctor: document.getElementById('pDoctor').value.trim()
+  };
+  if (!p.name) { toast('Please enter your name.', 'warning'); return; }
+  S.profile = p; S.profileDone = true;
+  lsS('hg_profileDone','true'); persist();
+  buildDashboard(); navigate('dashboardPage');
+}
+
+function openProfile() {
+  const p = S.profile;
+  document.getElementById('epName').value = p.name||'';
+  document.getElementById('epAge').value = p.age||'';
+  document.getElementById('epMobile').value = p.mobile||'';
+  document.getElementById('epECNum').value = p.ecNum||'';
+  document.getElementById('epMedHistory').value = p.medHistory||'';
+  openModal('editProfileModal');
+}
+
+function saveEditProfile() {
+  S.profile.name = document.getElementById('epName').value.trim();
+  S.profile.age = document.getElementById('epAge').value.trim();
+  S.profile.mobile = document.getElementById('epMobile').value.trim();
+  S.profile.ecNum = document.getElementById('epECNum').value.trim();
+  S.profile.medHistory = document.getElementById('epMedHistory').value.trim();
+  persist(); closeModal('editProfileModal');
+  toast('Profile updated successfully!');
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function buildDashboard() {
+  const p = S.profile;
+  const h = new Date().getHours();
+  const g = h < 12 ? t('dashWelcome') : h < 17 ? 'Good afternoon!' : 'Good evening!';
+  document.getElementById('dashWelcome').textContent = `${g} ${p.name ? p.name.split(' ')[0] : ''} 👋`;
+  updateSummary();
+}
+
+function updateSummary() {
+  const taken = S.medicines.filter(m => m.status==='taken').length;
+  const missed = S.medicines.filter(m => m.status==='missed').length;
+  const care = S.careItems || [];
+  const done = care.filter(c => c.done).length;
+  document.getElementById('sumMedTaken').textContent = taken;
+  document.getElementById('sumMissed').textContent = missed;
+  document.getElementById('sumCareDone').textContent = done;
+}
+
+/* ============================================================
+   MEDICINES
+   ============================================================ */
+function addMedicine() {
+  const name = document.getElementById('medName').value.trim();
+  const time = document.getElementById('medTime').value;
+  if (!name || !time) { toast('Please enter tablet name and time', 'warning'); return; }
+  S.medicines.push({
+    id: Date.now(), name, time,
+    when: document.getElementById('medWhen').value,
+    dose: document.getElementById('medDose').value,
+    freq: document.getElementById('medFreq').value,
+    status: 'pending', missCount: 0
+  });
+  persist(); renderMedList();
+  document.getElementById('medName').value = '';
+  document.getElementById('medTime').value = '';
+  toast(`✅ Reminder set for ${name} at ${time}`);
+}
+
+function markMed(id, status) {
+  const m = S.medicines.find(x => x.id === id);
+  if (m) { m.status = status; persist(); renderMedList(); updateSummary(); }
+}
+
+function deleteMed(id) {
+  S.medicines = S.medicines.filter(x => x.id !== id);
+  persist(); renderMedList(); updateSummary();
+}
+
+function renderMedList() {
+  const el = document.getElementById('medList');
+  if (!S.medicines.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--mist);">No medicine reminders yet. Add one above ☝️</div>';
+    return;
+  }
+  el.innerHTML = S.medicines.map(m => `
+    <div class="med-card ${m.status}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;">
+          <div class="med-name">${m.name}</div>
+          <div class="med-meta">
+            <span class="med-chip">⏰ ${m.time}</span>
+            <span class="med-chip">🍽️ ${m.when}</span>
+            <span class="med-chip">💊 ${m.dose}</span>
+            <span class="med-chip">📅 ${m.freq}</span>
+          </div>
+          ${m.status === 'missed' ? `<div class="missed-alert">⚠️ I think you may have missed this tablet. Please take it if not taken yet.</div>` : ''}
+          ${m.missCount >= 2 ? `<div class="missed-alert" style="background:#fff7ed;border-color:#fb923c;color:#9a3412;">💡 You often miss this medicine. Would you like to set an earlier reminder?</div>` : ''}
+        </div>
+        <span class="status-pill status-${m.status}">
+          ${m.status==='taken'?'✓ Taken':m.status==='missed'?'✗ Missed':'⏰ Pending'}
+        </span>
+      </div>
+      <div class="med-actions">
+        ${m.status!=='taken'?`<button class="btn btn-primary btn-sm" onclick="markMed(${m.id},'taken')">✅ Mark Taken</button>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="speakText('Time to take ${m.name}. ${m.dose} ${m.when}')">▶️ Remind</button>
+        ${S.profile.mobile?`<button class="btn btn-outline btn-sm" onclick="window.location.href='tel:${S.profile.mobile}'">📞 Call Me</button>`:''}
+        ${S.profile.ecNum?`<button class="btn btn-outline btn-sm" onclick="window.location.href='tel:${S.profile.ecNum}'">📞 Call Emergency</button>`:''}
+        <button class="btn btn-sm" style="background:var(--rose-light);color:var(--rose);" onclick="deleteMed(${m.id})">🗑️ Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   APPOINTMENTS
+   ============================================================ */
+function addAppointment() {
+  const doc = document.getElementById('apptDoc').value.trim();
+  const date = document.getElementById('apptDate').value;
+  if (!doc || !date) { toast('Please enter doctor name and date', 'warning'); return; }
+  S.appointments.push({
+    id: Date.now(), doc, date,
+    hosp: document.getElementById('apptHosp').value.trim(),
+    time: document.getElementById('apptTime').value,
+    notes: document.getElementById('apptNotes').value.trim()
+  });
+  persist(); renderApptList();
+  ['apptDoc','apptHosp','apptDate','apptTime','apptNotes'].forEach(id => document.getElementById(id).value='');
+  toast(`✅ Appointment with Dr. ${doc} saved`);
+}
+
+function deleteAppt(id) {
+  S.appointments = S.appointments.filter(a => a.id !== id);
+  persist(); renderApptList();
+}
+
+function renderApptList() {
+  const el = document.getElementById('apptList');
+  if (!S.appointments.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--mist);">No appointments yet.</div>'; return;
+  }
+  el.innerHTML = S.appointments.map(a => `
+    <div class="appt-card">
+      <span class="appt-icon">🏥</span>
+      <div class="appt-info">
+        <div class="appt-doc">Dr. ${a.doc}</div>
+        <div class="appt-meta">
+          ${a.hosp?`🏥 ${a.hosp}<br>`:''}
+          📅 ${a.date}${a.time?' &nbsp;⏰ '+a.time:''} 
+          ${a.notes?`<br>📝 ${a.notes}`:''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="speakText('Appointment reminder with Doctor ${a.doc} on ${a.date}')">▶️</button>
+        <button class="btn btn-sm" style="background:var(--rose-light);color:var(--rose);" onclick="deleteAppt(${a.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function switchTab(activeId, contentId) {
+  ['tabMeds','tabAppts'].forEach(id => document.getElementById(id).classList.toggle('active', id===activeId));
+  document.getElementById('medTab').style.display = contentId==='medTab'?'block':'none';
+  document.getElementById('apptTab').style.display = contentId==='apptTab'?'block':'none';
+  if (contentId==='apptTab') renderApptList();
+  if (contentId==='medTab') renderMedList();
+}
+
+/* ============================================================
+   DAILY CARE
+   ============================================================ */
+const CARE_DEFAULTS = [
+  { id:'water', icon:'💧', bg:'#e0f2fe', name:'Water Intake', desc:'Drink 8 glasses of water today', time:'08:00', done:false },
+  { id:'walk',  icon:'🚶', bg:'#dcfce7', name:'Morning Walk',  desc:'30 minutes gentle walking',        time:'07:00', done:false },
+  { id:'yoga',  icon:'🧘', bg:'#fdf4ff', name:'Exercise / Yoga', desc:'Light stretching & breathing',   time:'09:00', done:false },
+  { id:'med',   icon:'🧠', bg:'#fff7ed', name:'Meditation',    desc:'10 minutes of mindfulness',        time:'10:00', done:false }
+];
+
+function initCareItems() {
+  const saved = lsJ('hg_careItems', null);
+  S.careItems = saved || JSON.parse(JSON.stringify(CARE_DEFAULTS));
+}
+
+function markCare(id, done) {
+  const c = S.careItems.find(x => x.id===id);
+  if (c) { c.done=done; persist(); renderCare(); updateSummary(); }
+}
+
+function renderCare() {
+  document.getElementById('careList').innerHTML = S.careItems.map(c => `
+    <div class="care-card ${c.done?'done':'pending'}">
+      <div class="care-icon-wrap" style="background:${c.bg}">${c.icon}</div>
+      <div class="care-info">
+        <div class="care-name">${c.name}</div>
+        <div class="care-desc">${c.desc}</div>
+        <div class="care-time">⏰ Reminder: ${c.time}</div>
+      </div>
+      <div class="care-actions">
+        <span class="status-pill ${c.done?'status-done':'status-pending'}">${c.done?'✓ Done':'⏰ Pending'}</span>
+        ${!c.done?`<button class="btn btn-primary btn-sm" onclick="markCare('${c.id}',true)">Mark Done</button>`:
+                  `<button class="btn btn-ghost btn-sm" onclick="markCare('${c.id}',false)">Undo</button>`}
+        <button class="btn btn-ghost btn-sm" onclick="speakText('Reminder: Time for your ${c.name}')">▶️</button>
+        ${S.profile.mobile?`<button class="btn btn-outline btn-sm" onclick="window.location.href='tel:${S.profile.mobile}'">📞</button>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   DIET PLAN
+   ============================================================ */
+function renderDiet() {
+  const p = S.profile;
+  const age = parseInt(p.age)||70;
+  const hist = (p.medHistory||'').toLowerCase();
+  const isDiabetic = /diabet/i.test(hist);
+  const isHypertensive = /hypertens|blood pressure|\bbp\b/i.test(hist);
+  const isElderly = age >= 65;
+
+  const meals = [
+    {
+      time:'Breakfast', sub:'7:00 – 8:00 AM', icon:'🌅',
+      title: isDiabetic ? 'Low-Glycaemic Breakfast' : 'Nourishing Morning Meal',
+      items: isDiabetic
+        ? 'Oats porridge with skim milk (no added sugar) or 2 egg whites with 1 slice whole-grain toast. Green tea without sugar. Avoid white bread, sugary cereals, fruit juices.'
+        : isElderly
+          ? '2–3 soft idlis with sambar & chutney, or warm oatmeal with banana and warm milk. Easy to chew and digest. Herbal tea or warm water.'
+          : '2 rotis with a vegetable sabzi, or poha/upma. Include a glass of low-fat milk.'
+    },
+    {
+      time:'Mid-Morning', sub:'10:00 – 11:00 AM', icon:'☀️',
+      title:'Light Snack',
+      items: isDiabetic
+        ? 'A small bowl of papaya or guava (low GI fruits). Avoid mango, banana, grapes in excess. 1 glass warm water or buttermilk without salt.'
+        : 'Mixed fruit bowl (papaya, apple, pomegranate). A handful of unsalted nuts (almonds, walnuts). 1 glass coconut water or buttermilk.'
+    },
+    {
+      time:'Lunch', sub:'12:30 – 1:30 PM', icon:'🍛',
+      title: isHypertensive ? 'Low-Sodium Balanced Lunch' : 'Balanced Nutritious Lunch',
+      items: isHypertensive
+        ? '1–2 rotis with low-salt dal, steamed vegetables (carrots, beans, spinach), small cup of curd. No pickles or papads. Limit added salt. Small portion of rice is okay.'
+        : '1 cup rice + 1–2 rotis with dal, mixed sabzi, curd, and a small salad. Include leafy greens (spinach, methi). Drink a glass of warm water after lunch.'
+    },
+    {
+      time:'Evening Snack', sub:'4:00 – 5:00 PM', icon:'🌤️',
+      title:'Healthy Tea-Time',
+      items: isDiabetic
+        ? 'Roasted chana (½ cup), or a small bowl of sprouts. Herbal tea without sugar. Avoid biscuits, namkeen, sweets.'
+        : isElderly
+          ? 'Light poha, or roasted makhana (fox nuts) with warm ginger-tulsi tea. Avoid deep-fried snacks.'
+          : '2 multigrain biscuits with green tea, or a small bowl of sprouts chaat.'
+    },
+    {
+      time:'Dinner', sub:'7:00 – 8:00 PM', icon:'🌙',
+      title: isElderly ? 'Light & Easily Digestible Dinner' : 'Wholesome Dinner',
+      items: isElderly
+        ? 'Soft khichdi (moong dal + rice with a teaspoon of ghee) and gently cooked vegetables. Or 1–2 soft rotis with dal. Warm vegetable soup. Dinner at least 2 hours before sleeping.'
+        : '2 rotis with paneer curry or dal makhni, light sabzi. Avoid heavy fried foods. Warm milk with turmeric before bed.'
+    },
+    {
+      time:'Hydration', sub:'Throughout the Day', icon:'💧',
+      title:'Stay Well Hydrated',
+      items:`Drink ${isElderly?'8–10':'10–12'} glasses of water daily. Prefer warm or room-temperature water. Coconut water in the afternoon is excellent. ${isHypertensive?'Avoid adding salt to buttermilk or drinks.':''} Herbal teas (ginger, tulsi, chamomile) are beneficial. Avoid cold drinks and carbonated beverages.`
+    }
+  ];
+
+  if (isElderly) meals.push({
+    time:'Senior Nutrition Note', sub:'Discuss with Your Doctor', icon:'💊',
+    title:'Key Nutrients for Seniors',
+    items:'Ask your doctor about Vitamin D3, Calcium, and Vitamin B12 supplements — these are often needed in elderly. Include calcium-rich foods: milk, curd, ragi (finger millet), sesame seeds, drumstick leaves. Protein is important: include dal, eggs (if acceptable), paneer, and curd daily.'
+  });
+
+  document.getElementById('dietContent').innerHTML = meals.map(m => `
+    <div class="meal-card">
+      <div class="meal-time-badge"><div class="meal-icon">${m.icon}</div>${m.time}<br><span style="font-size:10px;opacity:0.7;">${m.sub}</span></div>
+      <div style="flex:1;">
+        <div class="meal-title">${m.title}</div>
+        <div class="meal-items">${m.items}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   SOS
+   ============================================================ */
+const MOCK_HOSPITALS = [
+  { name:'City General Hospital', dist:'0.8 km', phone:'080-22334455' },
+  { name:'Sri Ramakrishna Medical Centre', dist:'1.2 km', phone:'080-23456789' },
+  { name:'Apollo Clinic', dist:'2.1 km', phone:'080-44556677' },
+  { name:'Manipal Hospital', dist:'3.4 km', phone:'080-25521000' },
+  { name:'Victoria Government Hospital', dist:'4.0 km', phone:'080-26704218' }
+];
+
+function renderSOS() {
+  const p = S.profile;
+  document.getElementById('quickCallBtns').innerHTML = [
+    p.mobile ? `<a href="tel:${p.mobile}" class="btn btn-outline"">📞 Call ${p.name?p.name.split(' ')[0]:'Me'}</a>` : '',
+    p.ecNum ? `<a href="tel:${p.ecNum}" class="btn btn-outline">📞 Call ${p.ecName||'Emergency Contact'}</a>` : '',
+    `<a href="tel:108" class="btn btn-danger">🚑 Ambulance (108)</a>`,
+    `<a href="tel:112" class="btn btn-danger">🚨 Emergency (112)</a>`
+  ].filter(Boolean).join('');
+
+  document.getElementById('hospitalList').innerHTML = MOCK_HOSPITALS.map(h => `
+    <div class="hospital-card">
+      <div class="hospital-info">
+        <div class="hospital-name">🏥 ${h.name}</div>
+        <div class="hospital-meta">📍 ${h.dist} away &nbsp;•&nbsp; ${h.phone}</div>
+      </div>
+      <a href="tel:${h.phone}" class="btn btn-primary btn-sm">📞 Call</a>
+    </div>`).join('');
+}
+
+function triggerSOS() { openModal('sosModal'); }
+
+function confirmSOS() {
+  closeModal('sosModal');
+  document.getElementById('sosMainBtn').classList.add('active');
+  document.getElementById('sosAlert').style.display = 'block';
+  document.getElementById('sosAlert').scrollIntoView({ behavior:'smooth' });
+
+  const p = S.profile;
+  document.getElementById('sosCallBtns').innerHTML = [
+    p.ecNum ? `<a href="tel:${p.ecNum}" class="btn btn-danger">📞 Call ${p.ecName||'Emergency Contact'}</a>` : '',
+    `<a href="tel:108" class="btn btn-danger">🚑 Ambulance (108)</a>`,
+    `<a href="tel:112" class="btn btn-danger">🚨 Call 112</a>`
+  ].filter(Boolean).join('');
+
+  speakText('Emergency assistance has been triggered. Help is being notified. Stay calm. Assistance is on the way. Your emergency contacts have been alerted.');
+  toast('🚨 Emergency SOS Activated!', 'danger');
+
+  const logs = lsJ('hg_sosLogs', []);
+  logs.push({ time: new Date().toISOString(), name: p.name });
+  lsS('hg_sosLogs', JSON.stringify(logs));
+
+  setTimeout(() => document.getElementById('sosMainBtn').classList.remove('active'), 12000);
+}
+
+/* ============================================================
+   REMINDER CHECKER LOOP
+   ============================================================ */
+function startReminderLoop() {
+  setInterval(() => {
+    const now = new Date();
+    const hhmm = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+    S.medicines.forEach(m => {
+      if (m.time === hhmm && m.status === 'pending') {
+        const msg = `Time to take ${m.name}. ${m.dose}. ${m.when}.`;
+        toast(`⏰ ${msg}`); speakText(msg); S.lastReminder = msg;
+      }
+      if (m.status === 'pending' && m.time) {
+        const [h,mn] = m.time.split(':').map(Number);
+        const t = new Date(); t.setHours(h,mn,0,0);
+        if ((now - t) / 60000 > 15) {
+          m.status = 'missed'; m.missCount = (m.missCount||0)+1;
+          persist();
+          if (S.currentPage === 'reminderPage') renderMedList();
+          updateSummary();
+        }
+      }
+    });
+
+    (S.careItems||[]).forEach(c => {
+      if (c.time === hhmm && !c.done) {
+        const msg = `Reminder: Time for your ${c.name}`;
+        toast(`⏰ ${msg}`); speakText(msg);
+      }
+    });
+  }, 60000);
+}
+
+/* ============================================================
+   SPEECH SYNTHESIS
+   ============================================================ */
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = LANG_CODES[S.lang] || 'en-US';
+  u.rate = 0.88; u.pitch = 1.0; u.volume = 1;
+  window.speechSynthesis.speak(u);
+}
+
+/* ============================================================
+   VOICE ASSISTANT (TAP-TO-LISTEN)
+   ============================================================ */
+let recognition = null, isListening = false;
+
+function buildRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.continuous = false; r.interimResults = false;
+  r.lang = LANG_CODES[S.lang] || 'en-US';
+  return r;
+}
+
+function toggleVoice() {
+  if (isListening) { stopListening(); return; }
+  recognition = buildRecognition();
+  if (!recognition) {
+    openChat();
+    addBotMsg('Voice input is not supported in this browser. Please use Google Chrome or Edge. You can still type your questions here!');
+    return;
+  }
+  isListening = true;
+  const mic = document.getElementById('micBtn');
+  mic.classList.add('listening'); mic.textContent = '🔴';
+  openChat();
+  showVoiceStatus('🎤 Listening… say "Hey Genie, …"');
+
+  recognition.onresult = e => {
+    const text = e.results[0][0].transcript.trim();
+    showVoiceStatus(`✅ Heard: "${text}"`);
+    handleVoiceCommand(text);
+  };
+  recognition.onerror = e => {
+    const msgs = { 'not-allowed':'🚫 Microphone permission denied.', 'no-speech':'🔇 No speech detected. Try again.' };
+    showVoiceStatus(msgs[e.error] || `❌ ${e.error}`);
+    stopListening();
+  };
+  recognition.onend = stopListening;
+  try { recognition.start(); } catch { showVoiceStatus('❌ Could not start microphone.'); stopListening(); }
+}
+
+function stopListening() {
+  isListening = false;
+  const mic = document.getElementById('micBtn');
+  mic.classList.remove('listening'); mic.textContent = '🎤';
+  try { if (recognition) recognition.stop(); } catch {}
+}
+
+function showVoiceStatus(msg) {
+  const el = document.getElementById('voiceStatusBar');
+  el.textContent = msg; el.classList.add('visible');
+}
+
+function handleVoiceCommand(text) {
+  const lower = text.toLowerCase();
+  if (!lower.includes('hey genie')) {
+    addUserMsg(text);
+    const r = 'Please start your command with "Hey Genie". For example: "Hey Genie, what is my next medicine?"';
+    addBotMsg(r); speakText(r); return;
+  }
+  const cmd = lower.replace(/hey genie[,.\s]*/i,'').trim();
+  addUserMsg(text);
+  const reply = getReply(cmd);
+  setTimeout(() => { addBotMsg(reply.text); speakText(reply.text); if(reply.go) navigate(reply.go); }, 350);
+}
+
+/* ============================================================
+   AI ASSISTANT LOGIC
+   ============================================================ */
+function getReply(cmd) {
+  const l = cmd.toLowerCase();
+  const meds = S.medicines, appts = S.appointments, care = S.careItems||[], p = S.profile;
+
+  // Navigation
+  if (/reminder friend|reminder|medicine reminder/.test(l)) return { text:'Opening Reminder Friend!', go:'reminderPage' };
+  if (/daily care|care|walk|water|yoga|exercise/.test(l) && /open|go to|show/.test(l)) return { text:'Opening Daily Care!', go:'dailyCarePage' };
+  if (/diet|food|eat|meal/.test(l) && /open|go to|show/.test(l)) return { text:'Opening Diet Plan!', go:'dietPage' };
+  if (/emergency|sos/.test(l)) return { text:'Opening Emergency SOS. Stay safe!', go:'sosPage' };
+  if (/dashboard|home/.test(l)) return { text:'Going to Dashboard.', go:'dashboardPage' };
+
+  // Medicines
+  if (/next medicine|next tablet|when.*tablet|next.*med/.test(l)) {
+    const pending = meds.filter(m=>m.status==='pending').sort((a,b)=>a.time.localeCompare(b.time));
+    if (!pending.length) return { text:'Great news! No pending medicines right now. All caught up!' };
+    const m = pending[0];
+    return { text:`Your next medicine is ${m.name} at ${m.time}. Take ${m.dose} ${m.when}.` };
+  }
+  if (/miss.*medicine|miss.*tablet|did i miss/.test(l)) {
+    const missed = meds.filter(m=>m.status==='missed');
+    if (!missed.length) return { text:'You have not missed any medicine today. Well done!' };
+    return { text:`You have missed ${missed.length} medicine${missed.length>1?'s':''}: ${missed.map(m=>m.name).join(', ')}. Please take them as soon as possible.` };
+  }
+  if (/medicine|tablet|med/.test(l)) {
+    if (!meds.length) return { text:'No medicines added yet. Go to Reminder Friend to add your medicines.' };
+    const tk = meds.filter(m=>m.status==='taken').length, ps = meds.filter(m=>m.status==='pending').length, ms = meds.filter(m=>m.status==='missed').length;
+    return { text:`You have ${meds.length} medicines today. Taken: ${tk}, Pending: ${ps}, Missed: ${ms}.` };
+  }
+
+  // Appointments
+  if (/appointment|doctor/.test(l)) {
+    if (!appts.length) return { text:'No appointments scheduled. Go to Reminder Friend to add an appointment.' };
+    const next = [...appts].sort((a,b)=>a.date.localeCompare(b.date))[0];
+    return { text:`Your next appointment is with Dr. ${next.doc} at ${next.hosp||'the clinic'} on ${next.date}${next.time?' at '+next.time:''}.` };
+  }
+
+  // Diet / food
+  if (/eat|diet|food|meal|breakfast|lunch|dinner/.test(l)) {
+    const isDiabetic = /diabet/i.test(p.medHistory||'');
+    const msg = isDiabetic
+      ? 'For your diet today: low-sugar breakfast like oats, balanced lunch with dal and vegetables, light dinner. Avoid sweets and refined carbs. Opening your full diet plan!'
+      : 'Your personalised diet plan includes wholesome meals for the day. Opening Diet Plan now!';
+    return { text: msg, go: 'dietPage' };
+  }
+
+  // Care status
+  if (/care status|walk done|water done|daily/.test(l)) {
+    const done = care.filter(c=>c.done).length;
+    return { text:`Daily care status: ${done} out of ${care.length} activities completed today.` };
+  }
+
+  // Repeat reminder
+  if (/repeat|last reminder/.test(l)) {
+    if (S.lastReminder) { speakText(S.lastReminder); return { text:`Repeating: ${S.lastReminder}` }; }
+    return { text:'No recent reminder to repeat.' };
+  }
+
+  // Emergency contact
+  if (/emergency contact|contact/.test(l)) {
+    if (p.ecName || p.ecNum) return { text:`Your emergency contact is ${p.ecName||'your contact'} at ${p.ecNum||'number not saved'}.` };
+    return { text:'No emergency contact saved. Please update your profile.' };
+  }
+
+  // Greetings
+  if (/hello|hi|namaste|good morning|help/.test(l)) {
+    return { text:`Hello ${p.name?p.name.split(' ')[0]:'there'}! I'm Genie, your health assistant. I can help with medicines, appointments, diet, care status, and navigation. Try asking: "What is my next medicine?" or say "Hey Genie" with the mic button!` };
+  }
+
+  return { text:"I'm not sure I understood that. Try asking about your medicines, appointments, or diet. Or say 'Hey Genie open Reminder Friend' to navigate." };
+}
+
+/* ============================================================
+   CHAT UI
+   ============================================================ */
+let chatOpen = false;
+
+function openChat() {
+  chatOpen = true;
+  document.getElementById('chatPanel').classList.add('open');
+  if (!document.getElementById('chatMessages').hasChildNodes()) {
+    const p = S.profile;
+    addBotMsg(`Hi ${p.name?p.name.split(' ')[0]:'there'}! 👋 I'm Genie. Ask me about your medicines, appointments, diet, or tap the mic button and say "Hey Genie" to use voice commands!`);
+  }
+}
+
+function closeChat() {
+  chatOpen = false;
+  document.getElementById('chatPanel').classList.remove('open');
+}
+
+function addBotMsg(text) {
+  const el = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot'; div.textContent = text;
+  el.appendChild(div); el.scrollTop = el.scrollHeight;
+}
+
+function addUserMsg(text) {
+  const el = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg user'; div.textContent = text;
+  el.appendChild(div); el.scrollTop = el.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addUserMsg(text);
+  // Show typing
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'chat-msg typing';
+  typingDiv.innerHTML = '<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  document.getElementById('chatMessages').appendChild(typingDiv);
+  document.getElementById('chatMessages').scrollTop = 99999;
+  setTimeout(() => {
+    typingDiv.remove();
+    const reply = getReply(text.toLowerCase());
+    addBotMsg(reply.text);
+    if (reply.go) navigate(reply.go);
+  }, 600);
+}
+
+function quickAsk(topic) {
+  addUserMsg(topic.charAt(0).toUpperCase() + topic.slice(1));
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'chat-msg typing';
+  typingDiv.innerHTML = '<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  document.getElementById('chatMessages').appendChild(typingDiv);
+  document.getElementById('chatMessages').scrollTop = 99999;
+  setTimeout(() => {
+    typingDiv.remove();
+    const reply = getReply(topic);
+    addBotMsg(reply.text);
+    if (reply.go) navigate(reply.go);
+  }, 600);
+}
+
+/* ============================================================
+   MODALS & TOAST
+   ============================================================ */
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+});
+
+function toast(msg, type='', dur=4000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'notif-toast show';
+  if (type) el.classList.add(type);
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), dur);
+}
+</script>
+</body>
+</html>
